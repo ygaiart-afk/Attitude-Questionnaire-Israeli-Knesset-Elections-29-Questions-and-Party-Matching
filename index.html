@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>שאלון עמדות – בחירות לכנסת | YG APP</title>
+<meta name="theme-color" content="#0f1b2d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<style>
+:root{--ink:#0f1b2d;--muted:#5b6878;--line:#dde3eb;--paper:#edf0f5;--blue:#2447d6;--blue-soft:#eaefff;--gold:#f2b632}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;display:flex;flex-direction:column;font-family:"Heebo","Rubik","Segoe UI",system-ui,Arial,sans-serif;background:var(--paper);color:var(--ink);line-height:1.5}
+.hero{background:var(--ink);color:#fff;padding:26px 20px 86px;border-bottom:4px solid var(--gold)}
+.hero-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.mark{flex:none;width:52px;height:52px;border-radius:14px;background:var(--gold);color:var(--ink);display:grid;place-items:center;font-weight:800;font-size:20px;direction:ltr}
+.hero h1{margin:0;font-size:clamp(22px,5vw,30px);font-weight:800}
+.hero p{margin:2px 0 0;color:#b9c4d6;font-size:15px}
+.app{flex:1;width:100%;max-width:760px;margin:-62px auto 0;padding:0 16px}
+.card{background:#fff;border-radius:20px;padding:clamp(20px,5vw,34px);box-shadow:0 18px 40px -18px #0f1b2d66,0 2px 6px #0f1b2d14}
+.sub{color:var(--muted);line-height:1.65;font-size:15px}
+.progress{height:8px;background:#e6ebf1;border-radius:20px;overflow:hidden;margin:20px 0 10px}
+.bar{height:100%;width:0;background:var(--blue);border-radius:20px;transition:width .3s}
+.meta{display:flex;justify-content:space-between;color:var(--muted);font-size:14px}
+.qcat{display:inline-block;margin-top:26px;background:var(--blue-soft);color:var(--blue);border-radius:8px;padding:4px 11px;font-size:14px;font-weight:600}
+.question{font-size:clamp(19px,4.3vw,24px);line-height:1.5;font-weight:600;margin:14px 0 24px}
+.answers{display:grid;grid-template-columns:1fr;gap:8px}
+.ans{display:flex;align-items:center;min-height:52px;padding:9px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font:inherit;font-size:16px;text-align:right;cursor:pointer;transition:border-color .15s,background .15s}
+.ans:hover{border-color:var(--blue);background:#f6f8ff}
+.ans.sel{border-color:var(--blue);background:var(--blue-soft);box-shadow:inset 0 0 0 1px var(--blue);font-weight:600}
+.ans.sel .num{background:var(--blue);color:#fff}
+.ans.skip{grid-column:1/-1;border-style:dashed;color:var(--muted)}
+.choice{display:flex;align-items:center;gap:12px}
+.num{flex:none;width:30px;height:30px;border-radius:50%;background:#edf1f5;display:grid;place-items:center;font-weight:700;font-size:14px}
+.footer{display:flex;justify-content:space-between;gap:10px;margin-top:24px}
+.primary,.secondary{font:inherit;font-size:16px;font-weight:600;border-radius:12px;padding:13px 22px;cursor:pointer;transition:background .15s}
+.primary{background:var(--blue);color:#fff;border:1.5px solid var(--blue)}
+.primary:hover{background:#1a37ad}
+.secondary{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+.secondary:hover{background:#f3f5f8}
+button:disabled{opacity:.4;cursor:not-allowed}
+.wide{display:block;width:100%;margin-top:12px;text-align:center}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.result h1{margin:0 0 6px;font-size:clamp(24px,5.5vw,30px)}
+.result h2{margin:30px 0 10px;font-size:19px}
+.tag{display:inline-block;background:var(--blue-soft);color:#1d3aa8;border-radius:20px;padding:6px 13px;margin:4px 0 4px 6px;font-size:14px;font-weight:600}
+.axis{margin:16px 0}
+.axis-top{display:flex;justify-content:space-between;font-size:14px;color:var(--muted)}
+.axis-top span:first-child{color:var(--ink);font-weight:600}
+.track{height:10px;background:#e6ebf1;border-radius:20px;overflow:hidden;margin-top:8px}
+.fill{height:100%;border-radius:20px;background:linear-gradient(270deg,#5b7cff,var(--blue))}
+.infobox{background:var(--blue-soft);border-radius:14px;padding:14px 16px;margin:16px 0}
+.party{border:1.5px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;background:#fff}
+.party.top{border-color:var(--gold);background:linear-gradient(#fff9e8,#fff);box-shadow:0 0 0 3px #f2b63233}
+.party-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.party-id{display:flex;align-items:center;gap:12px}
+.rank{flex:none;width:34px;height:34px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:700}
+.party.top .rank{background:var(--gold);color:var(--ink)}
+.party h3{margin:0;font-size:19px}
+.leader{color:var(--muted);font-size:14px}
+.pct{font-size:26px;font-weight:800;color:var(--blue);direction:ltr}
+.party .track{margin-top:12px}
+.plink{display:inline-block;margin-top:12px;color:var(--blue);font-size:14px;font-weight:600;text-decoration:none}
+.plink:hover{text-decoration:underline}
+.note{font-size:13px;color:var(--muted);line-height:1.6;margin-top:22px}
+.stamp{padding:30px 16px 38px;text-align:center}
+.stamp-badge{display:inline-flex;align-items:center;gap:10px;direction:ltr;background:var(--ink);color:#fff;padding:7px 18px 7px 8px;border-radius:999px;font-weight:800;font-size:14px;letter-spacing:2px}
+.stamp-badge i{font-style:normal;width:28px;height:28px;border-radius:50%;background:var(--gold);color:var(--ink);display:grid;place-items:center;font-size:11px;letter-spacing:0}
+@media(min-width:620px){.answers{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.noscript-fallback h2{font-size:20px}.noscript-fallback{padding:2px}
+@media(max-width:480px){.hero{padding:22px 16px 76px}.app{padding:0 12px}.card{border-radius:18px}.question{font-size:20px}.ans{min-height:50px}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="hero-in"><div class="mark">YG</div><div><h1>שאלון עמדות</h1><p>בחירות לכנסת · 29 שאלות והתאמה למפלגות</p></div></div></header>
+<main class="app"><div class="card" id="app">
+<div class="noscript-fallback" id="fallback">
+  <h2 style="margin-top:0">פתיחת האפליקציה</h2>
+  <p class="sub">האפליקציה היא קובץ HTML אינטראקטיבי ודורשת JavaScript.</p>
+  <p class="sub"><b>באייפון:</b> אם המסך הזה נפתח מתוך אפליקציית "קבצים" ונשאר כאן, זו תצוגה מקדימה של iOS שאינה מריצה את הקוד. יש לפתוח את הקובץ ב‑Safari או להשתמש בקישור אינטרנטי לאפליקציה.</p>
+  <p class="sub">ב‑Safari ובדפדפנים מודרניים במחשב ובאנדרואיד האפליקציה אמורה להיטען באופן מלא.</p>
+</div>
+</div></main>
+<footer class="stamp"><span class="stamp-badge"><i>YG</i>YG APP</span></footer>
+<script>
+const qs=[
+["ביטחון — תפיסת יסוד","ישראל צריכה להעדיף הרתעה והכרעה צבאית על פני הסדרים מדיניים עם אויביה, גם אם הדבר כרוך במחיר בינלאומי כבד."],
+["ביטחון — הפסקת לחימה","כאשר ניתן להשיג הפסקת לחימה ממושכת והחזרת חטופים במחיר של ויתורים מדיניים או ביטחוניים מוגבלים, ישראל צריכה לשקול זאת ברצינות."],
+["עזה — שליטה עתידית","לאחר סיום הלחימה, ישראל צריכה להימנע משליטה אזרחית קבועה ברצועת עזה, גם אם הדבר מקשה על מניעת התעצמות מחודשת של ארגוני טרור."],
+["עזה — פירוז","ישראל צריכה להתעקש על פירוז משמעותי של עזה כתנאי מרכזי לכל הסדר עתידי."],
+["איראן ואיום אזורי","ישראל צריכה להיות מוכנה לפעולה צבאית עצמאית נגד איום גרעיני או אסטרטגי חמור, גם אם ארה״ב אינה תומכת בכך."],
+["יחסי ישראל–ארה״ב","שמירה על יחסים קרובים עם ארה״ב חשובה מספיק כדי שישראל תימנע לעיתים מצעדים שהיא סבורה שהם נכונים מבחינה ביטחונית."],
+
+["הסדר ישראלי–פלסטיני","בטווח הארוך ישראל צריכה לחתור להסדר שייתן לפלסטינים ישות מדינית עצמאית, בתנאי שיובטחו ביטחונה של ישראל ופירוז משמעותי."],
+["יהודה ושומרון","לישראל יש זכות לשמור על שליטה ישראלית קבועה בחלקים מיהודה ושומרון, גם אם הדבר מקשה מאוד על הסדר מדיני עתידי."],
+["התנחלויות","המשך הרחבת ההתיישבות הישראלית ביהודה ושומרון הוא יעד לאומי רצוי, ולא רק תוצאה של מדיניות ממשלתית קיימת."],
+["סיפוח","ישראל צריכה לשקול סיפוח של אזורים ביהודה ושומרון שבהם קיימת התיישבות ישראלית משמעותית, גם אם הדבר יוצר השלכות דמוגרפיות ובינלאומיות."],
+
+["מערכת המשפט","לבית המשפט העליון יש כיום סמכויות רחבות מדי, ויש לצמצם את יכולתו לבטל חוקים או להתערב בהחלטות הממשלה והכנסת."],
+["עצמאות מערכת המשפט","גם כאשר בית המשפט העליון פוסק נגד הממשלה הנבחרת, חיוני לשמור על עצמאותו ועל יכולתו לבקר את השלטון."],
+["בחירת שופטים","לנבחרי הציבור צריך להיות משקל גדול יותר בבחירת שופטי בית המשפט העליון, גם אם הדבר מפחית את עצמאות המערכת מהפוליטיקה."],
+["יועצים משפטיים","הממשלה הנבחרת צריכה להיות רשאית להחליף יועצים משפטיים בכירים כאשר היא אינה מסכימה עם עמדתם המקצועית, בכפוף לכללי מנהל תקין."],
+["שחיתות וטוהר מידות","גם אם הדבר מחליש פוליטית את הממשלה המכהנת, יש להרחיב את כלי האכיפה והפיקוח נגד נבחרי ציבור החשודים בשחיתות."],
+
+["דת ומדינה — שבת","יש להרחיב תחבורה ציבורית ופעילות מסחרית בשבת במקומות שבהם הציבור המקומי מעוניין בכך."],
+["נישואים אזרחיים","יש לאפשר בישראל נישואים אזרחיים מלאים לצד הנישואים הדתיים."],
+["חופש דת","המדינה צריכה לצמצם את הכפייה הדתית גם אם הדבר משנה את אופיו של המרחב הציבורי בישראל."],
+["זהות יהודית","למדינה יש הצדקה לשמר מאפיינים יהודיים במרחב הציבורי גם כאשר חלק מהציבור החילוני או הלא־יהודי אינו מעוניין בכך."],
+
+["גיוס חרדים","כל אזרח ישראלי, כולל חרדים, צריך להיות מחויב בשירות צבאי או לאומי משמעותי, עם מעט מאוד פטורים."],
+["תקצוב מוסדות חרדיים","תקצוב ציבורי למוסדות חרדיים צריך להיות מותנה במידה רבה יותר בלימודי ליבה, השתתפות בתעסוקה או בשירות אזרחי/צבאי."],
+["שוויון בנטל","אי־שוויון בחובות השירות בין קבוצות שונות בחברה הישראלית הוא בעיה חמורה שמדינה דמוקרטית צריכה לפתור גם במחיר של עימות פוליטי."],
+
+["כלכלה — שוק חופשי","עדיף להפחית מסים ורגולציה ולעודד יוזמה עסקית, גם אם הדבר מפחית חלק מההתערבות הממשלתית."],
+["יוקר המחיה","הממשלה צריכה להתערב באופן אקטיבי בשווקים שבהם קיימת ריכוזיות גבוהה, גם אם הדבר מגדיל רגולציה."],
+["מיסוי ורווחה","אני מוכן לשלם יותר מסים אם הדבר יממן שירותי בריאות, רווחה וסיוע משמעותיים יותר לאוכלוסיות חלשות."],
+["הפרטה","כאשר חברה פרטית יכולה לספק שירות ציבורי ביעילות גבוהה יותר, יש להעדיף הפרטה גם אם הדבר מצמצם את התפקיד הישיר של המדינה."],
+
+["חברה ושוויון","המדינה צריכה להשקיע יותר בצמצום פערים כלכליים וחברתיים בין קבוצות שונות בישראל, גם אם הדבר דורש העברת תקציבים משמעותית."],
+["יחסי יהודים–ערבים","יש להגדיל השקעות בתשתיות, חינוך ותעסוקה בחברה הערבית כדי לצמצם פערים, תוך דרישה מקבילה למאבק בפשיעה ובאלימות."],
+["הגירה ואזרחות","ישראל צריכה לשמור על מדיניות הגירה ואזרחות מחמירה יחסית, גם אם הדבר מקטין את מספר הזרים שיכולים להשתקע במדינה."]
+];
+const labels=["מתנגד מאוד","מתנגד","נוטה להתנגד","ניטרלי / לא בטוח","נוטה להסכים","מסכים","מסכים מאוד","לא יודע / מעדיף לא לענות"];
+let i=0, ans=Array(qs.length).fill(null);
+const app=document.getElementById("app");
+const fallback=document.getElementById("fallback");
+if(fallback) fallback.style.display="none";
+function render(){
+ if(i>=qs.length){result();return}
+ const pct=Math.round(i/qs.length*100);
+ app.innerHTML=`<div class="sub">29 שאלות המחולקות לביטחון, הסכסוך הישראלי–פלסטיני, מערכת המשפט, דת ומדינה, גיוס, כלכלה וחברה. אין תשובה נכונה או לא נכונה — המטרה היא למפות את העמדות שלך.</div>
+ <div class="progress"><div class="bar" style="width:${pct}%"></div></div>
+ <div class="meta"><span>שאלה ${i+1} מתוך ${qs.length}</span><span>${pct}%</span></div>
+ <div class="qcat">${qs[i][0]}</div><div class="question">${qs[i][1]}</div>
+ <div class="answers">${labels.map((x,k)=>`<button class="ans${ans[i]===k?' sel':''}${k===7?' skip':''}" onclick="pick(${k})" aria-pressed="${ans[i]===k}"><span class="choice"><span class="num">${k<7?k+1:"?"}</span>${x}</span></button>`).join("")}</div>
+ <div class="footer">
+   <button class="secondary" onclick="back()" ${i===0?"disabled":""}>→ הקודם</button>
+   <button class="primary" onclick="next()" ${ans[i]===null?"disabled":""}>המשך ←</button>
+ </div>`;
+}
+function pick(k){ans[i]=k;render()}
+function next(){if(ans[i]!==null){i++;render();window.scrollTo(0,0)}}
+function back(){if(i>0){i--;render();window.scrollTo(0,0)}}
+function result(){
+ window.scrollTo(0,0);
+ const groups={
+   "ביטחון": [0,1,2,3,4,5],
+   "הסכסוך והשטחים": [6,7,8,9],
+   "מערכת המשפט": [10,11,12,13,14],
+   "דת ומדינה": [15,16,17,18],
+   "חרדים ושירות": [19,20,21],
+   "כלכלה": [22,23,24,25],
+   "חברה ושוויון": [26,27,28]
+ };
+ const score=(inds)=>{
+   const v=inds.filter(j=>ans[j]!==null&&ans[j]<7).map(j=>ans[j]+1);
+   return v.length?Math.round(v.reduce((a,b)=>a+b,0)/v.length*10)/10:null;
+ };
+ const tags=[];
+ const s={}; for(const g in groups)s[g]=score(groups[g]);
+ if(s["ביטחון"]>=5.2) tags.push("דגש ביטחוני גבוה");
+ if(s["הסכסוך והשטחים"]>=5.2) tags.push("עמדה ניצית יותר בסוגיית השטחים");
+ if(s["הסכסוך והשטחים"]<=3.2) tags.push("פתיחות גבוהה יותר להסדר מדיני");
+ if(s["מערכת המשפט"]>=5.2) tags.push("נטייה לצמצום כוח מערכת המשפט");
+ if(s["מערכת המשפט"]<=3.2) tags.push("דגש חזק על עצמאות וביקורת משפטית");
+ if(s["דת ומדינה"]>=5.2) tags.push("נטייה לליברליזציה בדת ומדינה");
+ if(s["חרדים ושירות"]>=5.2) tags.push("דגש חזק על שוויון בחובות השירות");
+ if(s["כלכלה"]>=5.2) tags.push("נטייה כלכלית ליברלית/שוקית");
+ if(s["כלכלה"]<=3.2) tags.push("נטייה להתערבות כלכלית ומדינת רווחה");
+ if(s["חברה ושוויון"]>=5.2) tags.push("דגש חזק על צמצום פערים");
+ app.innerHTML=`<div class="result"><h1>מפת העמדות שלך</h1>
+ <p class="sub">הציונים להלן הם סיכום מתמטי של תשובותיך בלבד. הם אינם "ציון טוב/רע" ואינם המלצה למפלגה.</p>
+ <h2>הנושאים שבלטו</h2><div>${tags.map(t=>`<span class="tag">${t}</span>`).join("")||"לא נוצרה עדיין נטייה ברורה"}</div>
+ <h2>ממוצע לפי תחום</h2>
+ ${Object.entries(s).map(([g,v])=>`<div class="axis"><div class="axis-top"><span>${g}</span><span>${v===null?"אין מספיק תשובות":v+" / 7"}</span></div><div class="track"><div class="fill" style="width:${v===null?0:v/7*100}%"></div></div></div>`).join("")}
+ <h2>מה הלאה?</h2>
+ <p class="sub">השלב הבא יכול להיות השוואה שקופה מול המפלגות: לכל נושא נבדוק מה כל מפלגה אומרת במצע ובהצהרות עדכניות, נציג התאמות ואי־התאמות, ונפריד בין נושאים שחשובים לך מאוד לבין נושאים משניים.</p>
+ <button class="primary wide" onclick="showParties()">השוואת מפלגות</button>
+ <button class="secondary wide" onclick="i=0;render()">↺ להתחיל מחדש</button>
+ <div class="note">כדי להימנע מהטיה, שאלון כזה לא אמור "להחליט במקומך". הוא אמור לעזור לך לראות אילו מפלגות קרובות לעמדות שהבעת, ובאילו נושאים תידרש פשרה.</div>
+ </div>`;
+}
+const parties=[
+ {name:"ביחד",leader:"נפתלי בנט",url:"https://www.bechirot.gov.il/",profile:[5,3,3,5,5,4,5,3,3,3,3,5,3,3,4,5,5,5,3,3,5,5,4,4,5,3,5,5,5]},
+ {name:"ישר!",leader:"גדי איזנקוט",url:"https://www.bechirot.gov.il/",profile:[5,4,3,5,5,5,5,3,3,3,2,6,3,3,5,5,5,5,3,4,5,5,4,4,5,4,5,5,5]},
+ {name:"הליכוד",leader:"בנימין נתניהו",url:"https://www.bechirot.gov.il/",profile:[7,2,5,7,7,4,2,7,6,6,6,3,6,6,5,2,2,2,6,3,2,3,5,5,2,5,3,3,3]},
+ {name:"ישראל ביתנו",leader:"אביגדור ליברמן",url:"https://www.bechirot.gov.il/",profile:[6,5,4,6,6,6,5,4,3,3,4,5,4,4,6,6,6,6,4,7,7,7,5,6,5,6,6,6,5]},
+ {name:"הדמוקרטים",leader:"יאיר גולן",url:"https://www.bechirot.gov.il/",profile:[3,6,2,5,5,6,7,2,1,1,2,7,2,2,7,7,7,7,2,6,7,7,2,2,7,2,7,7,7]},
+ {name:"עוצמה יהודית",leader:"איתמר בן גביר",url:"https://www.bechirot.gov.il/",profile:[7,1,7,7,7,3,1,7,7,7,7,1,7,7,5,1,1,1,7,1,1,1,6,7,1,6,1,1,1]},
+ {name:"הציונות הדתית",leader:"בצלאל סמוטריץ'",url:"https://www.bechirot.gov.il/",profile:[7,2,7,7,7,4,1,7,7,7,6,2,7,6,6,1,1,1,7,2,1,2,5,6,2,5,2,2,1]},
+ {name:"ש\"ס",leader:"אריה דרעי",url:"https://www.bechirot.gov.il/",profile:[6,3,5,6,6,4,3,5,4,4,5,3,5,5,5,1,1,1,7,2,2,2,3,4,6,3,6,5,5]},
+ {name:"יהדות התורה",leader:"יצחק גולדקנופף",url:"https://www.bechirot.gov.il/",profile:[5,3,5,6,5,4,3,5,4,4,5,3,5,5,5,1,1,1,7,1,1,1,3,4,7,3,6,5,5]},
+ {name:"רע\"ם",leader:"מנסור עבאס",url:"https://www.bechirot.gov.il/",profile:[3,5,2,4,3,5,7,1,1,1,4,5,4,4,5,5,5,6,4,6,7,7,3,3,6,3,7,7,7]}
+];
+
+function similarity(user, party){
+  let sum=0, weight=0;
+  for(let j=0;j<user.length;j++){
+    if(user[j]===null || user[j]>=7) continue;
+    // The party profile uses the same 1–7 semantic scale as the questionnaire.
+    // Weight the two "core" questions in each domain slightly more.
+    const w=[0,1,3,5,6,7,9,10,12,14,15,17,18,20,21,23,24,26,27,28,29].includes(j)?1.15:1;
+    sum += (6-Math.abs((user[j]+1)-party[j]))/6*w;
+    weight += w;
+  }
+  return weight ? Math.max(0,Math.min(100,Math.round(sum/weight*100))) : null;
+}
+
+function showParties(){
+  window.scrollTo(0,0);
+  const scored=parties.map(p=>({...p,score:similarity(ans,p.profile)}))
+    .sort((a,b)=>(b.score??-1)-(a.score??-1));
+  const answered=ans.filter(x=>x!==null&&x<7).length;
+  app.innerHTML=`<div class="result"><h1>השוואת התאמה למפלגות</h1>
+   <p class="sub">הציון הוא מדד דמיון בין התשובות שלך לבין פרופילי העמדות שהוזנו לאפליקציה. הוא אינו תחזית הצבעה ואינו הוראה למי להצביע.</p>
+   <div class="infobox">
+    <b>${answered} מתוך ${qs.length} שאלות נכללו בחישוב.</b><br>
+    <span class="note">שאלות שסומנו "לא יודע" אינן מורידות את הציון.</span>
+   </div>
+   <h2>דירוג לפי מידת דמיון</h2>
+   ${scored.map((p,n)=>`<div class="party${n===0?' top':''}">
+     <div class="party-head">
+       <div class="party-id"><span class="rank">${n+1}</span><div><h3>${p.name}</h3><div class="leader">ראש הרשימה: ${p.leader}</div></div></div>
+       <div class="pct">${p.score===null?"—":p.score+"%"}</div>
+     </div>
+     <div class="track"><div class="fill" style="width:${p.score??0}%"></div></div>
+     <a href="${p.url}" target="_blank" rel="noopener" class="plink">מידע רשמי בוועדת הבחירות ↗</a>
+   </div>`).join("")}
+   <button class="primary wide" onclick="result()">→ חזרה למפת העמדות</button>
+   <div class="note"><b>חשוב:</b> אחוז התאמה אינו אומר שכל העמדות זהות. מפלגה יכולה לקבל ציון גבוה ועדיין להיות שונה ממך בנושא אחד שחשוב לך במיוחד. לפני החלטה כדאי לפתוח את עמדות המפלגות ולבדוק את הנושאים הקריטיים עבורך.</div>
+  </div>`;
+}
+
+function axis(a,b,x,y){
+ let v;
+ if(y===null) v=x===null?50:Math.max(0,Math.min(100,(x)/6*100));
+ else v=(x===null&&y===null)?50:Math.max(0,Math.min(100,((x??3)+(6-(y??3)))/12*100));
+ return `<div class="axis"><div class="axis-top"><span>${a}</span><span>${b}</span></div><div class="track"><div class="fill" style="width:${v}%"></div></div></div>`;
+}
+render();
+</script>
+</body></html>
